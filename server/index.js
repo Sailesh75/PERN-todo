@@ -57,11 +57,10 @@ app.put("/todos/:id", async (req, res) => {
     const { id } = req.params;
     const { description } = req.body;
     const updateTodo = await pool.query(
-      "UPDATE todo SET description=$1 WHERE todo_id=$2",
+      "UPDATE todo SET description=$1 WHERE todo_id=$2 RETURNING *",
       [description, id]
     );
     res.json("Todo updated successfully!!");
-    res.json(todo.row[0]);
   } catch (error) {
     console.log(error);
   }
@@ -82,6 +81,15 @@ app.delete("/todos/:id", async (req, res) => {
 });
 
 //delete all todos
+
+app.delete("/todos", async (req, res) => {
+  try {
+    const deleteAll = await pool.query("DELETE FROM todo;");
+    res.json("All records deleted!!");
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 app.listen(5000, () => {
   console.log(`Connection successful at port ${port}`);
