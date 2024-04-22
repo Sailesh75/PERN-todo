@@ -6,50 +6,35 @@ const InputTodo = () => {
 
   const addTodo = async (e) => {
     e.preventDefault();
-    try {
-      if (description === "") {
-        window.alert("Write SM please!!");
-      } else {
+    if (description.trim() === "") {
+      window.alert("Please write something!");
+    } else {
+      try {
         const response = await axios.post(`http://localhost:5000/todos`, {
           description,
         });
-        // once request has been sent it refreshes the window showing the change
-        window.location = "/";
+        window.location.reload();
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const deleteAllTodo = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.delete(`http://localhost:5000/todos`);
-      console.log(response);
-      window.location = "/";
-    } catch (error) {
-      console.log(error);
     }
   };
 
   return (
-    <>
-      <h1 className="m-4 text-center">Welcome to PERN todo app</h1>
-      <form className="d-flex p-2">
+    <div className="mb-4">
+      <form onSubmit={addTodo} className="d-flex flex-column flex-md-row">
         <input
           type="text"
-          className="form-control m-5"
+          className="form-control mb-2 mb-md-0 me-md-2"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-        ></input>
-        <button className="btn btn-primary m-5" onClick={addTodo}>
+          placeholder="Add a new todo..."
+        />
+        <button type="submit" className="btn btn-primary">
           Add
         </button>
-        <button className="btn btn-danger m-5" onClick={deleteAllTodo}>
-          Delete all
-        </button>
       </form>
-    </>
+    </div>
   );
 };
 

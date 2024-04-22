@@ -5,17 +5,17 @@ const EditTodo = ({ todo }) => {
   const [description, setDescription] = useState(todo.description);
 
   const updateTodo = async (e) => {
+    e.preventDefault();
     try {
-      e.preventDefault();
       const response = await axios.put(
         `http://localhost:5000/todos/${todo.todo_id}`,
         {
           description,
         }
       );
-      window.location = "/";
+      window.location.reload();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -23,49 +23,58 @@ const EditTodo = ({ todo }) => {
     <>
       <button
         type="button"
-        class="btn btn-secondary"
+        className="btn btn-secondary"
         data-bs-toggle="modal"
-        data-bs-target={`#id${todo.todo_id}`}
+        data-bs-target={`#editModal${todo.todo_id}`}
       >
-        Edit
+        <i className="bi bi-pencil-fill"></i>
       </button>
 
       <div
-        class="modal"
-        id={`id${todo.todo_id}`}
-        onClick={() => setDescription(todo.description)}
+        className="modal fade"
+        id={`editModal${todo.todo_id}`}
+        tabIndex="-1"
+        aria-labelledby={`editModalLabel${todo.todo_id}`}
+        aria-hidden="true"
       >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Edit the todo</h4>
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id={`editModalLabel${todo.todo_id}`}>
+                Edit Todo
+              </h5>
               <button
                 type="button"
-                class="btn-close"
+                className="btn-close"
                 data-bs-dismiss="modal"
-                onClick={() => setDescription(todo.description)}
+                aria-label="Close"
               ></button>
             </div>
-
-            <div class="modal-body">
+            <div className="modal-body">
               <form>
                 <input
                   type="text"
                   className="form-control"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                ></input>
+                />
               </form>
             </div>
-
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
                 type="button"
-                class="btn btn-success"
+                className="btn btn-secondary"
                 data-bs-dismiss="modal"
-                onClick={(e) => updateTodo(e)}
               >
-                Edit
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="btn btn-success"
+                data-bs-dismiss="modal"
+                onClick={updateTodo}
+              >
+                Save Changes
               </button>
             </div>
           </div>

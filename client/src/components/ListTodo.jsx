@@ -6,57 +6,57 @@ const ListTodo = () => {
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
-    getTodo();
+    fetchTodos();
   }, []);
 
-  const getTodo = async () => {
+  const fetchTodos = async () => {
     try {
       const response = await axios.get(`http://localhost:5000/todos`);
       setTodos(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   const deleteTodo = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/todos/${id}`);
-      setTodos(todos.filter((todos) => todos.todo_id !== id));
+      await axios.delete(`http://localhost:5000/todos/${id}`);
+      setTodos(todos.filter((todo) => todo.todo_id !== id));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
+
   return (
-    <>
-      <table className="table m-5">
+    <div className="table-responsive">
+      <table className="table">
         <thead>
           <tr>
-            <th>Todo list</th>
+            <th>Todo</th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>
         </thead>
         <tbody>
-          {/* need to map the data fetch via http req */}
-          {todos.map((todos) => (
-            <tr key={todos.todo_id}>
-              <td>{todos.description}</td>
+          {todos.map((todo) => (
+            <tr key={todo.todo_id}>
+              <td>{todo.description}</td>
               <td>
-                <EditTodo todo={todos} />
+                <EditTodo todo={todo} />
               </td>
               <td>
                 <button
-                  onClick={() => deleteTodo(todos.todo_id)}
+                  onClick={() => deleteTodo(todo.todo_id)}
                   className="btn btn-danger"
                 >
-                  delete
+                  <i className="bi bi-trash-fill"></i>
                 </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-    </>
+    </div>
   );
 };
 
