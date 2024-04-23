@@ -103,6 +103,6 @@ app.delete("/todos", async (req, res) => {
   }
 });
 
-app.listen(5000, () => {
+app.listen(port, () => {
   console.log(`Connection successful at port ${port}`);
 });
