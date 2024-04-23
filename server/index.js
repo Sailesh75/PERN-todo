@@ -9,8 +9,13 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json()); //gives excess to request.body which helps to get data from the client
 
-//Routes (building routes using postgres queries)
 
+app.get("/", async(req,res)=>{
+  res.status(200).send("Landing Page")
+});
+
+
+//Routes (building routes using postgres queries)
 //create a todo
 
 app.post("/todos", async (req, res) => {
@@ -20,9 +25,10 @@ app.post("/todos", async (req, res) => {
       "INSERT INTO todo(description) VALUES($1) RETURNING *",
       [description]
     );
-    res.json(newTodo.rows[0]);
+    res.status(201).json(newTodo.rows[0]);
   } catch (error) {
-    console.log(error);
+    console.error(`Error creating todo: ${error}`);
+    res.status(500).json({error:"Internal Server Error"});
   }
 });
 
@@ -33,7 +39,8 @@ app.get("/todos", async (req, res) => {
     const allTodos = await pool.query("SELECT * FROM todo");
     res.json(allTodos.rows);
   } catch (error) {
-    console.log(error);
+    console.error(`Error fetcing todos: ${error}`);
+    res.status(500).json({error: 'Internal Server Error'});
   }
 });
 
