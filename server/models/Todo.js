@@ -14,7 +14,6 @@ const Todo = db.define(
     },
   },
   {
-    // Specify the table name explicitly
     tableName: "todo",
   }
 );
