@@ -11,7 +11,9 @@ const ListTodo = () => {
 
   const fetchTodos = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/todos`);
+      const response = await axios.get(
+        `https://pern-todo-app-xxh9.onrender.com/api/todos`
+      );
       setTodos(response.data);
     } catch (error) {
       console.error(error);
@@ -20,7 +22,9 @@ const ListTodo = () => {
 
   const deleteTodo = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/todos/${id}`);
+      await axios.delete(
+        `https://pern-todo-app-xxh9.onrender.com/api/todos/${id}`
+      );
       setTodos(todos.filter((todo) => todo.todo_id !== id));
     } catch (error) {
       console.error(error);

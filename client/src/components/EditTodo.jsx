@@ -8,7 +8,7 @@ const EditTodo = ({ todo }) => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:5000/todos/${todo.todo_id}`,
+        `https://pern-todo-app-xxh9.onrender.com/api/todos/${todo.todo_id}`,
         {
           description,
         }

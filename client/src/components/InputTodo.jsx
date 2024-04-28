@@ -10,7 +10,7 @@ const InputTodo = () => {
       window.alert("Please write something!");
     } else {
       try {
-        const response = await axios.post(`http://localhost:5000/todos`, {
+        const response = await axios.post(`https://pern-todo-app-xxh9.onrender.com/api/todos`, {
           description,
         });
         window.location.reload();
