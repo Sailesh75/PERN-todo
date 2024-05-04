@@ -1,6 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
-// const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -8,10 +8,18 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.hasMany(Todo, { foreignKey: "userId", as: "todos" });
     }
+
+    // Method to compare password
+    static async comparePassword(plainPassword, hashedPassword) {
+      let result = await bcrypt.compare(plainPassword, hashedPassword);
+      return result;
+    }
+
     toJSON() {
       return { ...this.get(), id: undefined, userId: undefined };
     }
   }
+
   User.init(
     {
       uuid: {
@@ -42,6 +50,11 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notNull: { msg: "User must have password" },
           notEmpty: { msg: "Password must not be empty" },
+        },
+        set(value) {
+          const salt = bcrypt.genSaltSync(10);
+          const hashedPassword = bcrypt.hashSync(value, salt);
+          this.setDataValue("password", hashedPassword);
         },
       },
     },

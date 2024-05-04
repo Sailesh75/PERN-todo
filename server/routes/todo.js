@@ -5,7 +5,7 @@ const { Todo, User } = require("../models");
 //read all todo
 router.get("/todos", async (req, res) => {
   try {
-    const allTodo = await Todo.findAll();
+    const allTodo = await Todo.findAll({ include: "user" });
     res.status(200).json(allTodo);
   } catch (error) {
     res.status(500).json({ Error: "Internal Error" });
@@ -21,6 +21,7 @@ router.get("/todos/:uuid", async (req, res) => {
       where: {
         uuid,
       },
+      include: "user",
     });
     if (oneTodo.length === 0) {
       return res.status(404).json({ error: "Todo not found" });
@@ -36,14 +37,15 @@ router.get("/todos/:uuid", async (req, res) => {
 router.post("/todos", async (req, res) => {
   try {
     const { useruuid, description } = req.body;
-    if (!description||!useruuid) {
+    if (!description || !useruuid) {
       return res.status(400).json({ error: "Description is required" });
     }
-    const user = await User.findOne({where: {uuid:useruuid}});
-    console.log('I am here;')
+    const user = await User.findOne({ where: { uuid: useruuid } });
+    console.log("I am here;");
     console.log(user);
     const newTodo = await Todo.create({
-      description, userId: user.id
+      description,
+      userId: user.id,
     });
     res.status(200).json(newTodo);
   } catch (error) {

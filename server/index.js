@@ -17,6 +17,7 @@ app.get("/", async (req, res) => {
 //Routes
 app.use("/api", require("./routes/todo"));
 app.use("/api", require("./routes/user"));
+app.use("/auth",require("./routes/jwtAuth"));
 
 // Start the server
 app.listen(port, async () => {
