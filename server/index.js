@@ -3,11 +3,8 @@ const app = express();
 const cors = require("cors");
 const port = process.env.PORT || 5000;
 
-//database
-const db = require("./config/database");
-
 //model
-const Todo = require("./models/Todo");
+const { sequelize } = require("./models");
 
 //middleware function
 app.use(cors());
@@ -19,8 +16,11 @@ app.get("/", async (req, res) => {
 
 //Routes
 app.use("/api", require("./routes/todo"));
+app.use("/api", require("./routes/user"));
 
 // Start the server
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
+  await sequelize.authenticate();
+  console.log("Database connected!");
 });

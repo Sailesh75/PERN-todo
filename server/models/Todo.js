@@ -1,21 +1,36 @@
-const { DataTypes } = require("sequelize");
-const db = require("../config/database");
-
-const Todo = db.define(
-  "Todo",
-  {
-    todo_id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    description: {
-      type: DataTypes.STRING,
-    },
-  },
-  {
-    tableName: "todo",
+"use strict";
+const { Model } = require("sequelize");
+module.exports = (sequelize, DataTypes) => {
+  class Todo extends Model {
+    static associate({User}) {
+      // define association here
+      //default foreign key is UserId
+      this.belongsTo(User,{foreignKey:'userId',as:'user'})
+    }
+    toJSON() {
+      return { ...this.get(), id: undefined, userId:undefined };
+    }
   }
-);
-
-module.exports = Todo;
+  Todo.init(
+    {
+      uuid: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+      },
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      isCompleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+    },
+    {
+      sequelize,
+      tableName: "todos",
+      modelName: "Todo",
+    }
+  );
+  return Todo;
+};
