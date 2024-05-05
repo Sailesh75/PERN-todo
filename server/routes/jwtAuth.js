@@ -2,14 +2,14 @@ const express = require("express");
 const router = express.Router();
 const { User } = require("../models");
 const jwtGenerator = require("../utils/jwtGenerator");
-const bcrypt = require("bcryptjs");
+const validInfo = require("../middleware/validInfo");
+const authorize = require("../middleware/auth");
 
 //user register
-router.post("/register", async (req, res) => {
+router.post("/register", validInfo, async (req, res) => {
   try {
     const { username, email, password } = req.body;
     const newUSer = await User.create({ username, email, password });
-    // res.status(200).json(newUSer);
     //generate jwt token
     const token = jwtGenerator(newUSer);
     res.json({ token });
@@ -20,7 +20,7 @@ router.post("/register", async (req, res) => {
 });
 
 //user login
-router.post("/login", async (req, res) => {
+router.post("/login", validInfo, async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ where: { email } });
@@ -38,6 +38,15 @@ router.post("/login", async (req, res) => {
     //else give user the token
     const token = jwtGenerator(user);
     res.status(200).json({ token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
+});
+
+router.get("/verify", authorize, async (req, res) => {
+  try {
+    res.json(true);
   } catch (error) {
     console.error(error);
     res.status(500).json(error);

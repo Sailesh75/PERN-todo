@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { User, Todo } = require("../models");
-
+const { User } = require("../models");
 
 //get all Users
 router.get("/users", async (req, res) => {
@@ -14,7 +13,7 @@ router.get("/users", async (req, res) => {
   }
 });
 
-//get a user along with their todos
+//get a user with their todos
 router.get("/users/:uuid", async (req, res) => {
   try {
     const { uuid } = req.params;
@@ -29,8 +28,39 @@ router.get("/users/:uuid", async (req, res) => {
   }
 });
 
-//update user detail
+//update user detail(username,email)
+router.put("/users/:uuid", async (req, res) => {
+  try {
+    const { uuid } = req.params;
+    const { username, email } = req.body;
+    await User.update(
+      {
+        username,
+        email,
+      },
+      {
+        where: { uuid },
+      }
+    );
+    res.status(200).json({ msg: "User details updated successfully!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
+});
 
 //delete user detail
+router.delete("/users/:uuid", async (req, res) => {
+  try {
+    const { uuid } = req.params;
+    await User.destroy({
+      where: { uuid },
+    });
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Error deleting data" });
+    console.error(error);
+  }
+});
 
 module.exports = router;

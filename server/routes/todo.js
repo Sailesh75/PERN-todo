@@ -13,7 +13,7 @@ router.get("/todos", async (req, res) => {
   }
 });
 
-//read a todo
+//read a todo along with user info
 router.get("/todos/:uuid", async (req, res) => {
   try {
     const { uuid } = req.params;
