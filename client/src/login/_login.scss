@@ -1,0 +1,41 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #363740;
+}
+
+.login-card {
+  width: 400px;
+  padding: 20px;
+}
+
+.login-title {
+  text-align: center;
+  color: white;
+  background-color: #363740;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.login-btn {
+  width: auto;
+  padding: 10px 20px;
+  display: block;
+  margin: 0 auto;
+}
+
+.signup-link {
+  color: #3751ff; /* Match the button color */
+  text-decoration: none;
+}
+
+.form-label {
+  color: #fff;
+}

@@ -1,0 +1,25 @@
+/* Table Styles */
+.list-todo-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.list-todo-status {
+  width: 4rem;
+}
+
+.list-todo-todo {
+  flex: 1;
+}
+
+.list-todo-edit,
+.list-todo-delete {
+  width: 4rem;
+}
+
+.list-todo-checkbox {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+
