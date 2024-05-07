@@ -8,7 +8,7 @@ router.get("/", authorize, async (req, res) => {
     //req.user has the payload
     // res.json(req.user);
     const user = await User.findOne({ where: { uuid: req.user } });
-    res.status(200).json({ username: user.username });
+    res.status(200).json({ username: user.username, uuid: user.uuid });
   } catch (error) {
     console.error(error);
     res.status(500).json(error);

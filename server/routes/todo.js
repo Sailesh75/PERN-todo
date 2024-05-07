@@ -13,23 +13,21 @@ router.get("/todos", async (req, res) => {
   }
 });
 
-//read a todo along with user info
+// Get todos associated with a specific user
 router.get("/todos/:uuid", async (req, res) => {
   try {
     const { uuid } = req.params;
-    const oneTodo = await Todo.findAll({
-      where: {
-        uuid,
-      },
-      include: "user",
-    });
-    if (oneTodo.length === 0) {
-      return res.status(404).json({ error: "Todo not found" });
+
+    const user = await User.findOne({ where: { uuid } });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
-    res.status(200).json(oneTodo);
+    // Fetch todos associated with the user
+    const todos = await user.getTodos();
+    res.status(200).json(todos);
   } catch (error) {
-    res.status(500).json({ error: "Error fetching data" });
-    console.log(error);
+    console.error(error);
+    res.status(500).json({ error: "Error fetching todos" });
   }
 });
 
@@ -70,6 +68,28 @@ router.put("/todos/:uuid", async (req, res) => {
       }
     );
     res.status(200).json({ message: "Update successful" });
+  } catch (error) {
+    res.status(500).json({ error: "Error updating data" });
+    console.error(error);
+  }
+});
+
+//update checkbox status of todo
+router.put("/todos/check/:uuid", async (req, res) => {
+  try {
+    const { isCompleted } = req.body;
+    const { uuid } = req.params;
+    await Todo.update(
+      {
+        isCompleted,
+      },
+      {
+        where: {
+          uuid,
+        },
+      }
+    );
+    res.status(200).json({ message: "Update successful", isCompleted });
   } catch (error) {
     res.status(500).json({ error: "Error updating data" });
     console.error(error);
