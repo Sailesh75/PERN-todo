@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
@@ -11,25 +12,23 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Login from "./login/Login";
 import SignUp from "./signUp/Signup";
 import Nopage from "./components/Nopage";
-import axios from "axios";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
   const setAuth = (boolean) => {
     setIsAuthenticated(boolean);
   };
 
   const isAuth = async () => {
     try {
-      console.log("inside App.js", localStorage.token);
       const response = await axios.get("http://localhost:5000/auth/verify", {
-        header: {
+        headers: {
           token: localStorage.token,
         },
       });
-      const parseRes = await response.data;
-      console.log("st from isAUth check", parseRes);
+      const parseRes = response.data;
+      console.log(parseRes);
+      parseRes === true ? setIsAuthenticated(true) : setIsAuthenticated(false);
     } catch (error) {
       console.error(error);
     }

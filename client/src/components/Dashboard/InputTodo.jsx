@@ -1,17 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const InputTodo = () => {
   const [description, setDescription] = useState("");
+  const [uuid, setUuid] = useState("");
+
+  const getUSerUuid = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/dashboard/", {
+        headers: {
+          token: localStorage.token,
+        },
+      });
+      setUuid(response.data.uuid);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const addTodo = async (e) => {
     e.preventDefault();
     if (description.trim() === "") {
-      window.alert("Please write something!");
+      toast.warning("Please write something!");
     } else {
       try {
-        const response = await axios.post(`https://pern-todo-app-xxh9.onrender.com/api/todos`, {
-          description,
+        await axios.post(`http://localhost:5000/api/todos`, {
+          description: description,
+          useruuid: uuid,
         });
         window.location.reload();
       } catch (error) {
@@ -19,6 +35,10 @@ const InputTodo = () => {
       }
     }
   };
+
+  useEffect(() => {
+    getUSerUuid();
+  }, []);
 
   return (
     <div className="mb-4">
@@ -39,5 +59,3 @@ const InputTodo = () => {
 };
 
 export default InputTodo;
-
-

@@ -28,16 +28,24 @@ const Dashboard = ({ setAuth }) => {
 
   useEffect(() => {
     getUserName();
-  },[]);
+  }, []);
 
   return (
     <div className="container py-5 my-5 rounded shadow bg-light">
-      <h1 className="text-center mb-4">Todo App</h1>
-      <button onClick={handleLogout}>Log out</button>
+      <div className="dashboard-header">
+        <div></div>
+        <h1 className="text-center mb-4">Todo App</h1>
+        <button className="btn btn-dark" onClick={handleLogout} >
+          Log out
+        </button>
+      </div>
       <p className="text-center mb-4">
-        Welcome to your personalized todo list application!
+        Welcome{" "}
+        <span>
+          <strong>{name}</strong>
+        </span>{" "}
+        to your todo app!!
       </p>
-      <p>{name}</p>
       <InputTodo />
       <ListTodo />
       <DeleteAllTodos />

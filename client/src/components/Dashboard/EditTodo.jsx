@@ -7,12 +7,9 @@ const EditTodo = ({ todo }) => {
   const updateTodo = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(
-        `https://pern-todo-app-xxh9.onrender.com/api/todos/${todo.todo_id}`,
-        {
-          description,
-        }
-      );
+      await axios.put(`http://localhost:5000/api/todos/${todo.uuid}`, {
+        description,
+      });
       window.location.reload();
     } catch (error) {
       console.error(error);
@@ -25,22 +22,22 @@ const EditTodo = ({ todo }) => {
         type="button"
         className="btn btn-secondary"
         data-bs-toggle="modal"
-        data-bs-target={`#editModal${todo.todo_id}`}
+        data-bs-target={`#editModal${todo.uuid}`}
       >
         <i className="bi bi-pencil-fill"></i>
       </button>
 
       <div
         className="modal fade"
-        id={`editModal${todo.todo_id}`}
+        id={`editModal${todo.uuid}`}
         tabIndex="-1"
-        aria-labelledby={`editModalLabel${todo.todo_id}`}
+        aria-labelledby={`editModalLabel${todo.uuid}`}
         aria-hidden="true"
       >
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id={`editModalLabel${todo.todo_id}`}>
+              <h5 className="modal-title" id={`editModalLabel${todo.uuid}`}>
                 Edit Todo
               </h5>
               <button

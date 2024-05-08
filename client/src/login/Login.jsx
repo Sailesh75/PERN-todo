@@ -11,20 +11,39 @@ const Login = ({ setAuth }) => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  const isValidate = () => {
+    let isProceed = true;
+    let errormessage = "Please enter your";
+    if (email == null || email == "") {
+      isProceed = false;
+      errormessage += " Email";
+    }
+    if (password == null || password == "") {
+      isProceed = false;
+      errormessage += " Password";
+    }
+    if (!isProceed) {
+      toast.warning(errormessage);
+    }
+    return isProceed;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:5000/auth/login", {
-        email,
-        password,
-      });
-      const { token } = response.data;
-      localStorage.setItem("token", token);
-      setAuth(true);
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-      toast.error("Login failed. Please check your credentials.");
+    if (isValidate()) {
+      try {
+        const response = await axios.post("http://localhost:5000/auth/login", {
+          email,
+          password,
+        });
+        const { token } = response.data;
+        localStorage.setItem("token", token);
+        setAuth(true);
+        navigate("/");
+      } catch (error) {
+        console.error(error);
+        toast.error("Login failed. Please check your credentials.");
+      }
     }
   };
 
@@ -38,13 +57,12 @@ const Login = ({ setAuth }) => {
               Email
             </label>
             <input
-              type="email"
+              type="text"
               className="form-control"
               id="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
             />
           </div>
           <div className="form-group">
@@ -58,7 +76,6 @@ const Login = ({ setAuth }) => {
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
             />
             <span className="password-toggle-icon2">{ToggleIcon}</span>
           </div>

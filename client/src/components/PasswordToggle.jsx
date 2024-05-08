@@ -20,17 +20,3 @@ const PasswordToggle = () => {
 export default PasswordToggle;
 
 
-
-// .password-toggle-icon2 {
-//   position: relative;
-//   top: -30px;
-//   left: 295px;
-//   cursor: pointer;
-//   color: #9fa2b4;
-// }
-
-
-// span a {
-//   letter-spacing: 0.2px;
-//   color: #3751ff;
-// }

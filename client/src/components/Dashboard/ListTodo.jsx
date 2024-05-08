@@ -5,47 +5,65 @@ import "./_ListTodo.scss";
 
 const ListTodo = () => {
   const [todos, setTodos] = useState([]);
+  const [uuid, setUuid] = useState("");
 
   useEffect(() => {
-    fetchTodos();
+    const getUserUuid = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/dashboard/", {
+          headers: {
+            token: localStorage.token,
+          },
+        });
+        setUuid(response.data.uuid);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getUserUuid();
   }, []);
 
-  const fetchTodos = async () => {
-    try {
-      const response = await axios.get(
-        `https://pern-todo-app-xxh9.onrender.com/api/todos`
-      );
-      setTodos(response.data);
-    } catch (error) {
-      console.error(error);
+
+  useEffect(() => {
+    if (uuid) {
+      const fetchTodos = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:5000/api/todos/${uuid}`
+          );
+          setTodos(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      fetchTodos();
     }
-  };
+  }, [uuid]);
 
   const deleteTodo = async (id) => {
     try {
-      await axios.delete(
-        `https://pern-todo-app-xxh9.onrender.com/api/todos/${id}`
-      );
-      setTodos(todos.filter((todo) => todo.todo_id !== id));
+      console.log(id);
+      await axios.delete(`http://localhost:5000/api/todos/${id}`);
+      setTodos(todos.filter((todo) => todo.uuid !== id));
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleCheckboxChange = async (event, todoId) => {
-    const isCompleted = event.target.checked;
+  const handleCheckboxChange = async (event, todoUuid) => {
+    const newIsCompleted = event.target.checked;
 
     try {
-      // Send an HTTP PUT request to the backend to update the `completed` status of the todo
-      await axios.put(
-        `https://pern-todo-app-xxh9.onrender.com/api/todos/${todoId}`,
-        { completed: isCompleted }
-      );
-
-      // Update the state of the todos list to reflect the change
+      await axios.put(`http://localhost:5000/api/todos/check/${todoUuid}`, {
+        isCompleted: newIsCompleted,
+      });
       setTodos((prevTodos) =>
         prevTodos.map((todo) =>
-          todo.todo_id === todoId ? { ...todo, completed: isCompleted } : todo
+          todo.uuid === todoUuid
+            ? { ...todo, isCompleted: newIsCompleted }
+            : todo
         )
       );
     } catch (error) {
@@ -65,30 +83,32 @@ const ListTodo = () => {
           </tr>
         </thead>
         <tbody>
-          {todos.map((todo) => (
-            <tr key={todo.todo_id}>
-              <td className="list-todo-status">
-                <input
-                  type="checkbox"
-                  className="list-todo-checkbox"
-                  checked={todo.completed}
-                  onChange={(e) => handleCheckboxChange(e, todo.todo_id)}
-                />
-              </td>
-              <td className="list-todo-todo">{todo.description}</td>
-              <td className="list-todo-edit">
-                <EditTodo todo={todo} />
-              </td>
-              <td className="list-todo-delete">
-                <button
-                  onClick={() => deleteTodo(todo.todo_id)}
-                  className="btn btn-danger"
-                >
-                  <i className="bi bi-trash-fill"></i>
-                </button>
-              </td>
-            </tr>
-          ))}
+          {todos.map((todo) => {
+            return (
+              <tr key={todo.uuid}>
+                <td className="list-todo-status">
+                  <input
+                    type="checkbox"
+                    className="list-todo-checkbox"
+                    checked={todo.isCompleted}
+                    onChange={(e) => handleCheckboxChange(e, todo.uuid)}
+                  />
+                </td>
+                <td className="list-todo-todo">{todo.description}</td>
+                <td className="list-todo-edit">
+                  <EditTodo todo={todo} />
+                </td>
+                <td className="list-todo-delete">
+                  <button
+                    onClick={() => deleteTodo(todo.uuid)}
+                    className="btn btn-danger"
+                  >
+                    <i className="bi bi-trash-fill"></i>
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
