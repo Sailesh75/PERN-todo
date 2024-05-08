@@ -17,7 +17,6 @@ router.get("/todos", async (req, res) => {
 router.get("/todos/:uuid", async (req, res) => {
   try {
     const { uuid } = req.params;
-
     const user = await User.findOne({ where: { uuid } });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
