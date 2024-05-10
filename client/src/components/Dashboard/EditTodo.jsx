@@ -7,7 +7,7 @@ const EditTodo = ({ todo }) => {
   const updateTodo = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/api/todos/${todo.uuid}`, {
+      await axios.put(`https://todoapp-bnx4.onrender.com/api/todos/${todo.uuid}`, {
         description,
       });
       window.location.reload();

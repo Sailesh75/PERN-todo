@@ -32,10 +32,13 @@ const Login = ({ setAuth }) => {
     e.preventDefault();
     if (isValidate()) {
       try {
-        const response = await axios.post("http://localhost:5000/auth/login", {
-          email,
-          password,
-        });
+        const response = await axios.post(
+          "https://todoapp-bnx4.onrender.com/auth/login",
+          {
+            email,
+            password,
+          }
+        );
         const { token } = response.data;
         localStorage.setItem("token", token);
         setAuth(true);

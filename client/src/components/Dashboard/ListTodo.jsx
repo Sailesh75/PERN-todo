@@ -10,11 +10,14 @@ const ListTodo = () => {
   useEffect(() => {
     const getUserUuid = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/dashboard/", {
-          headers: {
-            token: localStorage.token,
-          },
-        });
+        const response = await axios.get(
+          "https://todoapp-bnx4.onrender.com/dashboard/",
+          {
+            headers: {
+              token: localStorage.token,
+            },
+          }
+        );
         setUuid(response.data.uuid);
       } catch (error) {
         console.error(error);
@@ -24,13 +27,12 @@ const ListTodo = () => {
     getUserUuid();
   }, []);
 
-
   useEffect(() => {
     if (uuid) {
       const fetchTodos = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:5000/api/todos/${uuid}`
+            `https://todoapp-bnx4.onrender.com/api/todos/${uuid}`
           );
           setTodos(response.data);
         } catch (error) {
@@ -45,7 +47,7 @@ const ListTodo = () => {
   const deleteTodo = async (id) => {
     try {
       console.log(id);
-      await axios.delete(`http://localhost:5000/api/todos/${id}`);
+      await axios.delete(`https://todoapp-bnx4.onrender.com/api/todos/${id}`);
       setTodos(todos.filter((todo) => todo.uuid !== id));
     } catch (error) {
       console.error(error);
@@ -56,9 +58,12 @@ const ListTodo = () => {
     const newIsCompleted = event.target.checked;
 
     try {
-      await axios.put(`http://localhost:5000/api/todos/check/${todoUuid}`, {
-        isCompleted: newIsCompleted,
-      });
+      await axios.put(
+        `https://todoapp-bnx4.onrender.com/api/todos/check/${todoUuid}`,
+        {
+          isCompleted: newIsCompleted,
+        }
+      );
       setTodos((prevTodos) =>
         prevTodos.map((todo) =>
           todo.uuid === todoUuid

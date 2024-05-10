@@ -15,7 +15,7 @@ const Dashboard = ({ setAuth }) => {
 
   const getUserName = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/dashboard/", {
+      const response = await axios.get("https://todoapp-bnx4.onrender.com/dashboard/", {
         headers: {
           token: localStorage.token,
         },
