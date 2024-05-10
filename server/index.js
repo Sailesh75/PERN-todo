@@ -1,8 +1,9 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const port = process.env.PORT || 5000;
 const { sequelize } = require("./models");
+require("dotenv").config();
+const port = process.env.PORT || 5000;
 
 //middleware function
 app.use(cors());
@@ -15,12 +16,15 @@ app.get("/", async (req, res) => {
 //Routes
 app.use("/api", require("./routes/todo"));
 app.use("/api", require("./routes/user"));
-app.use("/auth",require("./routes/jwtAuth"));
+app.use("/auth", require("./routes/jwtAuth"));
 app.use("/dashboard", require("./routes/dashboard"));
-
 
 app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
-  await sequelize.authenticate();
-  console.log("Database connected!");
+  try {
+    await sequelize.authenticate();
+    console.log("Database connected!");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
 });
