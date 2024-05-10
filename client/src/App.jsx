@@ -21,7 +21,7 @@ const App = () => {
 
   const isAuth = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/auth/verify", {
+      const response = await axios.get("https://todoapp-bnx4.onrender.com/auth/verify", {
         headers: {
           token: localStorage.token,
         },
