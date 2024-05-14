@@ -34,7 +34,7 @@ const Signup = ({ setAuth }) => {
     if (isValidate()) {
       try {
         const response = await axios.post(
-          "https://todoapp-bnx4.onrender.com/auth/register",
+          "/auth/register",
           {
             username,
             email,

@@ -8,7 +8,7 @@ const InputTodo = () => {
 
   const getUSerUuid = async () => {
     try {
-      const response = await axios.get("https://todoapp-bnx4.onrender.com/dashboard/", {
+      const response = await axios.get("/dashboard/", {
         headers: {
           token: localStorage.token,
         },
@@ -25,7 +25,7 @@ const InputTodo = () => {
       toast.warning("Please write something!");
     } else {
       try {
-        await axios.post(`https://todoapp-bnx4.onrender.com/api/todos`, {
+        await axios.post(`/api/todos`, {
           description: description,
           useruuid: uuid,
         });

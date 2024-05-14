@@ -33,7 +33,7 @@ const Login = ({ setAuth }) => {
     if (isValidate()) {
       try {
         const response = await axios.post(
-          "https://todoapp-bnx4.onrender.com/auth/login",
+          "/auth/login",
           {
             email,
             password,
