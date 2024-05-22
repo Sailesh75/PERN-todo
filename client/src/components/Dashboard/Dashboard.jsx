@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import InputTodo from "./InputTodo";
 import ListTodo from "./ListTodo";
 import DeleteAllTodos from "./DeleteAllTodos";
-import axios from "axios";
+import api from "../../api";
 
 const Dashboard = ({ setAuth }) => {
   const [name, setName] = useState("");
@@ -15,7 +15,8 @@ const Dashboard = ({ setAuth }) => {
 
   const getUserName = async () => {
     try {
-      const response = await axios.get("/dashboard/", {
+      const response = await api
+      .get("/dashboard/", {
         headers: {
           token: localStorage.token,
         },
