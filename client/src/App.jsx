@@ -15,6 +15,8 @@ import Nopage from "./components/Nopage";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true); 
+
   const setAuth = (boolean) => {
     setIsAuthenticated(boolean);
   };
@@ -28,15 +30,28 @@ const App = () => {
       });
       const parseRes = response.data;
       console.log(parseRes);
-      parseRes === true ? setIsAuthenticated(true) : setIsAuthenticated(false);
+      setIsAuthenticated(parseRes === true);
     } catch (error) {
       console.error(error);
+      setIsAuthenticated(false);
+    } finally {
+      setLoading(false); 
     }
   };
 
   useEffect(() => {
     isAuth();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Router>
