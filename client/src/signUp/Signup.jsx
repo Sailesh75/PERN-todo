@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import axios from "axios";
 import api from "../api";
 import { toast } from "react-toastify";
 import PasswordToggle from "../components/PasswordToggle";
@@ -13,40 +12,54 @@ const Signup = ({ setAuth }) => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const isValidate = () => {
-    let isProceed = true;
-    let errormessage = "Please enter your";
-    if (email == null || email == "") {
-      isProceed = false;
-      errormessage += " Email";
-    }
-    if (password == null || password == "") {
-      isProceed = false;
-      errormessage += " Password";
-    }
-    if (!isProceed) {
-      toast.warning(errormessage);
-    }
-    return isProceed;
+  const isUsernameValid = (username) => {
+    return /^[a-zA-Z][a-zA-Z0-9]{2,}$/.test(username);
+  };
+
+  const isEmailValid = (email) => {
+    return /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email);
+  };
+
+  const isPasswordValid = (password) => {
+    const passwordRegex =
+      /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+    return passwordRegex.test(password);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isValidate()) {
-      try {
-        const response = await api.post("/auth/register", {
-          username,
-          email,
-          password,
-        });
-        const { token } = response.data;
-        localStorage.setItem("token", token);
-        setAuth(true);
-        navigate("/");
-      } catch (error) {
-        console.error(error);
-        toast.error("Signup failed. Please check your inputs.");
-      }
+    if (!username.trim() || !email.trim() || !password.trim()) {
+      toast.warning("Please fill in all fields.");
+      return;
+    }
+    if (!isUsernameValid(username)) {
+      toast.error(
+        "Username must be at least 3 characters long and start with a letter. Only letters and numbers are allowed."
+      );
+      return;
+    }
+    if (!isEmailValid(email)) {
+      toast.error("Invalid email format");
+      return;
+    }
+    if (!isPasswordValid(password)) {
+      toast.error(
+        "Password must be at least 8 characters long and contain at least one number and one special character."
+      );
+      return;
+    }
+    try {
+      const response = await api.post("/auth/register", {
+        username,
+        email,
+        password,
+      });
+      const { token } = response.data;
+      localStorage.setItem("token", token);
+      setAuth(true);
+      navigate("/");
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -91,7 +104,6 @@ const Signup = ({ setAuth }) => {
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
           <span className="password-toggle-icon2">{ToggleIcon}</span>
         </div>
