@@ -5,7 +5,7 @@ const path = require("path");
 const Sequelize = require("sequelize");
 const process = require("process");
 const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || "production";
+const env = process.env.NODE_ENV || "test";
 const config = require("../config/config")[env];
 const db = {};
 
@@ -16,7 +16,7 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, {
     host: config.host,
     dialect: config.dialect,
-    port: 52392,
+    port: config.port,
     pool: {
       max: 5,
       min: 0,
