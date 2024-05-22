@@ -7,7 +7,7 @@ const EditTodo = ({ todo }) => {
   const updateTodo = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`https://todoapp-bnx4.onrender.com/api/todos/${todo.uuid}`, {
+      await axios.put(`/api/todos/${todo.uuid}`, {
         description,
       });
       window.location.reload();
@@ -34,7 +34,7 @@ const EditTodo = ({ todo }) => {
         aria-labelledby={`editModalLabel${todo.uuid}`}
         aria-hidden="true"
       >
-        <div className="modal-dialog">
+        <div className="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id={`editModalLabel${todo.uuid}`}>
@@ -48,31 +48,30 @@ const EditTodo = ({ todo }) => {
               ></button>
             </div>
             <div className="modal-body">
-              <form>
+              <form onSubmit={updateTodo}>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control mb-3"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 />
+                <div className="d-flex justify-content-end">
+                  <button
+                    type="button"
+                    className="btn btn-secondary me-2"
+                    data-bs-dismiss="modal"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-success"
+                    data-bs-dismiss="modal"
+                  >
+                    Save Changes
+                  </button>
+                </div>
               </form>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="btn btn-success"
-                data-bs-dismiss="modal"
-                onClick={updateTodo}
-              >
-                Save Changes
-              </button>
             </div>
           </div>
         </div>

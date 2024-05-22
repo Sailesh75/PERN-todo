@@ -5,7 +5,7 @@ const DeleteAllTodos = () => {
   const deleteAllTodos = async () => {
     if (window.confirm("Are you sure you want to delete all todos?")) {
       try {
-        const response = await axios.delete(`https://todoapp-bnx4.onrender.com/api/todos`);
+        const response = await axios.delete(`/api/todos`);
         window.location.reload();
       } catch (error) {
         console.error(error);

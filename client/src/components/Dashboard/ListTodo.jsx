@@ -11,7 +11,7 @@ const ListTodo = () => {
     const getUserUuid = async () => {
       try {
         const response = await axios.get(
-          "https://todoapp-bnx4.onrender.com/dashboard/",
+          "/dashboard/",
           {
             headers: {
               token: localStorage.token,
@@ -32,7 +32,7 @@ const ListTodo = () => {
       const fetchTodos = async () => {
         try {
           const response = await axios.get(
-            `https://todoapp-bnx4.onrender.com/api/todos/${uuid}`
+            `/api/todos/${uuid}`
           );
           setTodos(response.data);
         } catch (error) {
@@ -47,7 +47,7 @@ const ListTodo = () => {
   const deleteTodo = async (id) => {
     try {
       console.log(id);
-      await axios.delete(`https://todoapp-bnx4.onrender.com/api/todos/${id}`);
+      await axios.delete(`/api/todos/${id}`);
       setTodos(todos.filter((todo) => todo.uuid !== id));
     } catch (error) {
       console.error(error);
@@ -59,7 +59,7 @@ const ListTodo = () => {
 
     try {
       await axios.put(
-        `https://todoapp-bnx4.onrender.com/api/todos/check/${todoUuid}`,
+        `/api/todos/check/${todoUuid}`,
         {
           isCompleted: newIsCompleted,
         }
