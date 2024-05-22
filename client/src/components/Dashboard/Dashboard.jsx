@@ -34,17 +34,17 @@ const Dashboard = ({ setAuth }) => {
     <div className="container py-5 my-5 rounded shadow bg-light">
       <div className="dashboard-header">
         <div></div>
-        <h1 className="text-center mb-4">Todo App</h1>
-        <button className="btn btn-dark" onClick={handleLogout} >
+        <h1 className="text-center mb-4">Task Overview</h1>
+        <button className="btn btn-dark" onClick={handleLogout}>
           Log out
         </button>
       </div>
       <p className="text-center mb-4">
-        Welcome{" "}
+        Hello{" "}
         <span>
           <strong>{name}</strong>
-        </span>{" "}
-        to your todo app!!
+        </span>
+        , get started with your ToDo list!
       </p>
       <InputTodo />
       <ListTodo />
