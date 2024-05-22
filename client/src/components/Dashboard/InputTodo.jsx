@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../api";
 import { toast } from "react-toastify";
 
 const InputTodo = () => {
@@ -8,7 +8,7 @@ const InputTodo = () => {
 
   const getUSerUuid = async () => {
     try {
-      const response = await axios.get("/dashboard/", {
+      const response = await api.get("/dashboard/", {
         headers: {
           token: localStorage.token,
         },
@@ -25,7 +25,7 @@ const InputTodo = () => {
       toast.warning("Please write something!");
     } else {
       try {
-        await axios.post(`/api/todos`, {
+        await api.post(`/api/todos`, {
           description: description,
           useruuid: uuid,
         });

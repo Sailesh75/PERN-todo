@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "./api";
 import { ToastContainer } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
@@ -23,7 +23,7 @@ const App = () => {
 
   const isAuth = async () => {
     try {
-      const response = await axios.get("/auth/verify", {
+      const response = await api.get("/auth/verify", {
         headers: {
           token: localStorage.token,
         },

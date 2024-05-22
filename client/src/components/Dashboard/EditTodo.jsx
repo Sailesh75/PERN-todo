@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../../api";
 
 const EditTodo = ({ todo }) => {
   const [description, setDescription] = useState(todo.description);
@@ -7,7 +7,7 @@ const EditTodo = ({ todo }) => {
   const updateTodo = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`/api/todos/${todo.uuid}`, {
+      await api.put(`/api/todos/${todo.uuid}`, {
         description,
       });
       window.location.reload();

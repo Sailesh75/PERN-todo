@@ -1,11 +1,11 @@
 import React from "react";
-import axios from "axios";
+import api from "../../api";
 
 const DeleteAllTodos = () => {
   const deleteAllTodos = async () => {
     if (window.confirm("Are you sure you want to delete all todos?")) {
       try {
-        const response = await axios.delete(`/api/todos`);
+        await api.delete(`/api/todos`);
         window.location.reload();
       } catch (error) {
         console.error(error);
@@ -23,6 +23,3 @@ const DeleteAllTodos = () => {
 };
 
 export default DeleteAllTodos;
-
-
-

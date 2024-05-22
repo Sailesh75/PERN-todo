@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+import api from "../api";
 import { toast } from "react-toastify";
 import PasswordToggle from "../components/PasswordToggle";
 import "../signUp/_signup.scss";
@@ -33,14 +34,11 @@ const Signup = ({ setAuth }) => {
     e.preventDefault();
     if (isValidate()) {
       try {
-        const response = await axios.post(
-          "/auth/register",
-          {
-            username,
-            email,
-            password,
-          }
-        );
+        const response = await api.post("/auth/register", {
+          username,
+          email,
+          password,
+        });
         const { token } = response.data;
         localStorage.setItem("token", token);
         setAuth(true);

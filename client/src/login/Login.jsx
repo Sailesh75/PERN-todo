@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PasswordToggle from "../components/PasswordToggle";
-import axios from "axios";
+// import axios from "axios";
+import api from "../api";
 import { toast } from "react-toastify";
 import "../login/_login.scss";
 
@@ -32,7 +33,7 @@ const Login = ({ setAuth }) => {
     e.preventDefault();
     if (isValidate()) {
       try {
-        const response = await axios.post(
+        const response = await api.post(
           "/auth/login",
           {
             email,

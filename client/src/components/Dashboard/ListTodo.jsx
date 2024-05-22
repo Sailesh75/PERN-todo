@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../api";
 import EditTodo from "./EditTodo";
 import "./_ListTodo.scss";
 
@@ -10,7 +10,7 @@ const ListTodo = () => {
   useEffect(() => {
     const getUserUuid = async () => {
       try {
-        const response = await axios.get(
+        const response = await api.get(
           "/dashboard/",
           {
             headers: {
@@ -31,7 +31,7 @@ const ListTodo = () => {
     if (uuid) {
       const fetchTodos = async () => {
         try {
-          const response = await axios.get(
+          const response = await api.get(
             `/api/todos/${uuid}`
           );
           setTodos(response.data);
@@ -47,7 +47,7 @@ const ListTodo = () => {
   const deleteTodo = async (id) => {
     try {
       console.log(id);
-      await axios.delete(`/api/todos/${id}`);
+      await api.delete(`/api/todos/${id}`);
       setTodos(todos.filter((todo) => todo.uuid !== id));
     } catch (error) {
       console.error(error);
@@ -58,7 +58,7 @@ const ListTodo = () => {
     const newIsCompleted = event.target.checked;
 
     try {
-      await axios.put(
+      await api.put(
         `/api/todos/check/${todoUuid}`,
         {
           isCompleted: newIsCompleted,
