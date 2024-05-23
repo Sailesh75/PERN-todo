@@ -6,18 +6,16 @@ import "./_ListTodo.scss";
 const ListTodo = () => {
   const [todos, setTodos] = useState([]);
   const [uuid, setUuid] = useState("");
+  const [loading, setLoading] = useState({});
 
   useEffect(() => {
     const getUserUuid = async () => {
       try {
-        const response = await api.get(
-          "/dashboard/",
-          {
-            headers: {
-              token: localStorage.token,
-            },
-          }
-        );
+        const response = await api.get("/dashboard/", {
+          headers: {
+            token: localStorage.token,
+          },
+        });
         setUuid(response.data.uuid);
       } catch (error) {
         console.error(error);
@@ -31,9 +29,7 @@ const ListTodo = () => {
     if (uuid) {
       const fetchTodos = async () => {
         try {
-          const response = await api.get(
-            `/api/todos/${uuid}`
-          );
+          const response = await api.get(`/api/todos/${uuid}`);
           setTodos(response.data);
         } catch (error) {
           console.error(error);
@@ -46,7 +42,6 @@ const ListTodo = () => {
 
   const deleteTodo = async (id) => {
     try {
-      console.log(id);
       await api.delete(`/api/todos/${id}`);
       setTodos(todos.filter((todo) => todo.uuid !== id));
     } catch (error) {
@@ -56,23 +51,21 @@ const ListTodo = () => {
 
   const handleCheckboxChange = async (event, todoUuid) => {
     const newIsCompleted = event.target.checked;
+    setLoading((prev) => ({ ...prev, [todoUuid]: true }));
 
     try {
-      await api.put(
-        `/api/todos/check/${todoUuid}`,
-        {
-          isCompleted: newIsCompleted,
-        }
-      );
+      await api.put(`/api/todos/check/${todoUuid}`, {
+        isCompleted: newIsCompleted,
+      });
       setTodos((prevTodos) =>
         prevTodos.map((todo) =>
-          todo.uuid === todoUuid
-            ? { ...todo, isCompleted: newIsCompleted }
-            : todo
+          todo.uuid === todoUuid ? { ...todo, isCompleted: newIsCompleted } : todo
         )
       );
     } catch (error) {
       console.error("Error updating todo status:", error);
+    } finally {
+      setLoading((prev) => ({ ...prev, [todoUuid]: false }));
     }
   };
 
@@ -92,12 +85,18 @@ const ListTodo = () => {
             return (
               <tr key={todo.uuid}>
                 <td className="list-todo-status">
-                  <input
-                    type="checkbox"
-                    className="list-todo-checkbox"
-                    checked={todo.isCompleted}
-                    onChange={(e) => handleCheckboxChange(e, todo.uuid)}
-                  />
+                  {loading[todo.uuid] ? (
+                    <div className="spinner-border spinner-border-sm text-primary" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  ) : (
+                    <input
+                      type="checkbox"
+                      className="list-todo-checkbox"
+                      checked={todo.isCompleted}
+                      onChange={(e) => handleCheckboxChange(e, todo.uuid)}
+                    />
+                  )}
                 </td>
                 <td className="list-todo-todo">{todo.description}</td>
                 <td className="list-todo-edit">

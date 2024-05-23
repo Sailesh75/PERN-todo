@@ -6,20 +6,20 @@ import { toast } from "react-toastify";
 import "../login/_login.scss";
 
 const Login = ({ setAuth }) => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [PasswordInputType, ToggleIcon] = PasswordToggle();
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!username.trim() || !password.trim()) {
+    if (!email.trim() || !password.trim()) {
       toast.warning("Please fill in all fields.");
       return;
     }
     try {
       const response = await api.post("/auth/login", {
-        username,
+        email,
         password,
       });
       const { token } = response.data;
@@ -38,16 +38,16 @@ const Login = ({ setAuth }) => {
         <h2 className="login-title">Login</h2>
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="username" className="form-label">
-              Username
+            <label htmlFor="email" className="form-label">
+              Email
             </label>
             <input
               type="text"
               className="form-control"
-              id="username"
-              placeholder="Enter your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              id="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="form-group">
