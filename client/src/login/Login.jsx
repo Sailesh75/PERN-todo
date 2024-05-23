@@ -39,7 +39,7 @@ const Login = ({ setAuth }) => {
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
             <label htmlFor="email" className="form-label">
-              email
+              Email
             </label>
             <input
               type="text"
