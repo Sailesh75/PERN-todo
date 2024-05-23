@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./_modal.scss";
+import "./_Modal.scss";
 
 const Modal = ({ show, onClose, children }) => {
   if (!show) return null;
