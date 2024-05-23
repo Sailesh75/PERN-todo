@@ -59,7 +59,11 @@ const Signup = ({ setAuth }) => {
       setAuth(true);
       navigate("/");
     } catch (error) {
-      console.error(error);
+      if (error.response && error.response.status === 400) {
+        toast.error("Email already registered. Please use a different email.");
+      } else {
+        console.error(error.message);
+      }
     }
   };
 
