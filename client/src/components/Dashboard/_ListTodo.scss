@@ -1,4 +1,3 @@
-/* Table Styles */
 .list-todo-table {
   width: 100%;
   table-layout: fixed;
@@ -22,8 +21,29 @@
   height: 1.2rem;
 }
 
-.dashboard-header {
+.dashboard-header-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
+}
+
+.welcome-text {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.username {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.logout-icon {
+  margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+  .logout-text {
+    display: none;
+  }
 }

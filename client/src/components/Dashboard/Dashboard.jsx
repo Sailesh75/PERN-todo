@@ -4,6 +4,7 @@ import ListTodo from "./ListTodo";
 import DeleteAllTodos from "./DeleteAllTodos";
 import api from "../../api";
 
+
 const Dashboard = ({ setAuth }) => {
   const [name, setName] = useState("");
 
@@ -15,8 +16,7 @@ const Dashboard = ({ setAuth }) => {
 
   const getUserName = async () => {
     try {
-      const response = await api
-      .get("/dashboard/", {
+      const response = await api.get("/dashboard/", {
         headers: {
           token: localStorage.token,
         },
@@ -33,20 +33,16 @@ const Dashboard = ({ setAuth }) => {
 
   return (
     <div className="container py-5 my-5 rounded shadow bg-light">
-      <div className="dashboard-header">
-        <div></div>
-        <h1 className="text-center mb-4">Task Overview</h1>
+      <div className="dashboard-header-top d-flex justify-content-between align-items-center mb-4">
+        <p className="welcome-text mb-0">
+          Welcome, <span className="username">{name}</span>
+        </p>
         <button className="btn btn-dark" onClick={handleLogout}>
-          Log out
+          <i className="bi bi-box-arrow-right logout-icon"></i>
+          <span className="logout-text"> Logout</span>
         </button>
       </div>
-      <p className="text-center mb-4">
-        Hello{" "}
-        <span>
-          <strong>{name}</strong>
-        </span>
-        , get started with your ToDo list!
-      </p>
+      <h3 className="text-center mb-4">Task Overview</h3>
       <InputTodo />
       <ListTodo />
       <DeleteAllTodos />
