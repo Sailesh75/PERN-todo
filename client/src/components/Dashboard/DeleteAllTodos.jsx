@@ -16,7 +16,7 @@ const DeleteAllTodos = () => {
   return (
     <div className="d-flex justify-content-end">
       <button className="btn btn-danger mt-4" onClick={deleteAllTodos}>
-        <i className="bi bi-trash-fill"></i> Delete All Todos
+        <i className="bi bi-trash-fill"></i> Delete All
       </button>
     </div>
   );

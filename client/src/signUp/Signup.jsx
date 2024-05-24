@@ -13,7 +13,7 @@ const Signup = ({ setAuth }) => {
   const navigate = useNavigate();
 
   const isUsernameValid = (username) => {
-    return /^[a-zA-Z][a-zA-Z0-9]{2,}$/.test(username);
+    return /^[a-zA-Z][a-zA-Z0-9]{2,14}$/.test(username);
   };
 
   const isEmailValid = (email) => {
@@ -34,7 +34,7 @@ const Signup = ({ setAuth }) => {
     }
     if (!isUsernameValid(username)) {
       toast.error(
-        "Username must be at least 3 characters long and start with a letter. Only letters and numbers are allowed."
+        "Username must be at least 3-15 characters long and start with a letter. Only letters and numbers are allowed."
       );
       return;
     }
@@ -59,7 +59,11 @@ const Signup = ({ setAuth }) => {
       setAuth(true);
       navigate("/");
     } catch (error) {
-      console.error(error);
+      if (error.response && error.response.status === 400) {
+        toast.error("Email already registered. Please use a different email.");
+      } else {
+        console.error(error.message);
+      }
     }
   };
 
