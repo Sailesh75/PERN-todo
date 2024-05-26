@@ -4,9 +4,10 @@ import ListTodo from "./ListTodo";
 import DeleteAllTodos from "./DeleteAllTodos";
 import api from "../../api";
 
-
 const Dashboard = ({ setAuth }) => {
   const [name, setName] = useState("");
+  const [uuid, setUuid] = useState("");
+  const [todos, setTodos] = useState([]);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -22,6 +23,16 @@ const Dashboard = ({ setAuth }) => {
         },
       });
       setName(response.data.username);
+      setUuid(response.data.uuid);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchTodos = async (userUuid) => {
+    try {
+      const response = await api.get(`/api/todos/${userUuid}`);
+      setTodos(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -30,6 +41,12 @@ const Dashboard = ({ setAuth }) => {
   useEffect(() => {
     getUserName();
   }, []);
+
+  useEffect(() => {
+    if (uuid) {
+      fetchTodos(uuid);
+    }
+  }, [uuid]);
 
   return (
     <div className="container py-5 my-5 rounded shadow bg-light">
@@ -43,8 +60,8 @@ const Dashboard = ({ setAuth }) => {
         </button>
       </div>
       <h3 className="text-center mb-4">Task Overview</h3>
-      <InputTodo />
-      <ListTodo />
+      <InputTodo uuid={uuid} setTodos={setTodos} todos={todos} />
+      <ListTodo todos={todos} setTodos={setTodos} />
       <DeleteAllTodos />
     </div>
   );

@@ -1,44 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import api from "../../api";
 import EditTodo from "./EditTodo";
 import "./_ListTodo.scss";
 
-const ListTodo = () => {
-  const [todos, setTodos] = useState([]);
-  const [uuid, setUuid] = useState("");
+const ListTodo = ({ todos, setTodos }) => {
   const [loading, setLoading] = useState({});
-
-  useEffect(() => {
-    const getUserUuid = async () => {
-      try {
-        const response = await api.get("/dashboard/", {
-          headers: {
-            token: localStorage.token,
-          },
-        });
-        setUuid(response.data.uuid);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getUserUuid();
-  }, []);
-
-  useEffect(() => {
-    if (uuid) {
-      const fetchTodos = async () => {
-        try {
-          const response = await api.get(`/api/todos/${uuid}`);
-          setTodos(response.data);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-
-      fetchTodos();
-    }
-  }, [uuid]);
 
   const deleteTodo = async (id) => {
     try {
@@ -59,7 +25,9 @@ const ListTodo = () => {
       });
       setTodos((prevTodos) =>
         prevTodos.map((todo) =>
-          todo.uuid === todoUuid ? { ...todo, isCompleted: newIsCompleted } : todo
+          todo.uuid === todoUuid
+            ? { ...todo, isCompleted: newIsCompleted }
+            : todo
         )
       );
     } catch (error) {
@@ -86,7 +54,10 @@ const ListTodo = () => {
               <tr key={todo.uuid}>
                 <td className="list-todo-status">
                   {loading[todo.uuid] ? (
-                    <div className="spinner-border spinner-border-sm text-primary" role="status">
+                    <div
+                      className="spinner-border spinner-border-sm text-primary"
+                      role="status"
+                    >
                       <span className="visually-hidden">Loading...</span>
                     </div>
                   ) : (
