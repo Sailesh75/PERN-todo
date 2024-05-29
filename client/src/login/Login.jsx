@@ -18,7 +18,7 @@ const Login = ({ setAuth }) => {
       return;
     }
     try {
-      const response = await api.post("/auth/login", {
+      const response = await api.post("/user/login", {
         email,
         password,
       });

@@ -49,7 +49,7 @@ const Signup = ({ setAuth }) => {
       return;
     }
     try {
-      const response = await api.post("/auth/register", {
+      const response = await api.post("/user/register", {
         username,
         email,
         password,

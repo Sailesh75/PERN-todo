@@ -23,7 +23,7 @@ const App = () => {
 
   const isAuth = async () => {
     try {
-      const response = await api.get("/auth/verify", {
+      const response = await api.get("/user/verify", {
         headers: {
           token: localStorage.token,
         },
