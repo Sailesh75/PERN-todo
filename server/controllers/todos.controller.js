@@ -1,9 +1,7 @@
-const express = require("express");
-const router = express.Router();
 const { Todo, User } = require("../models");
 
-//read all todo
-router.get("/todos", async (req, res) => {
+// Get all todos
+const getAllTodos = async (req, res) => {
   try {
     const allTodo = await Todo.findAll({ include: "user" });
     res.status(200).json(allTodo);
@@ -11,115 +9,103 @@ router.get("/todos", async (req, res) => {
     res.status(500).json({ Error: "Internal Error" });
     console.error(error);
   }
-});
+};
 
 // Get todos associated with a specific user
-router.get("/todos/:uuid", async (req, res) => {
+const getTodosByUserUuid = async (req, res) => {
   try {
     const { uuid } = req.params;
     const user = await User.findOne({ where: { uuid } });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    // Fetch todos associated with the user
     const todos = await user.getTodos();
     res.status(200).json(todos);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error fetching todos" });
   }
-});
+};
 
-//post a todo
-router.post("/todos", async (req, res) => {
+// Create a new todo
+const createTodo = async (req, res) => {
   try {
     const { useruuid, description } = req.body;
     if (!description || !useruuid) {
-      return res.status(400).json({ error: "Description is required" });
+      return res
+        .status(400)
+        .json({ error: "Description and user UUID are required" });
     }
     const user = await User.findOne({ where: { uuid: useruuid } });
-    console.log("I am here;");
-    console.log(user);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
     const newTodo = await Todo.create({
       description,
       userId: user.id,
     });
     res.status(200).json(newTodo);
   } catch (error) {
-    res.status(500).json({ error: "Error while creating the data" });
+    res.status(500).json({ error: "Error while creating the todo" });
     console.error(error);
   }
-});
+};
 
-//update a todo
-router.put("/todos/:uuid", async (req, res) => {
+// Update a todo
+const updateTodo = async (req, res) => {
   try {
     const { description } = req.body;
     const { uuid } = req.params;
-    await Todo.update(
-      {
-        description,
-      },
-      {
-        where: {
-          uuid,
-        },
-      }
-    );
+    await Todo.update({ description }, { where: { uuid } });
     res.status(200).json({ message: "Update successful" });
   } catch (error) {
-    res.status(500).json({ error: "Error updating data" });
+    res.status(500).json({ error: "Error updating todo" });
     console.error(error);
   }
-});
+};
 
-//update checkbox status of todo
-router.put("/todos/check/:uuid", async (req, res) => {
+// Update checkbox status of todo
+const updateTodoStatus = async (req, res) => {
   try {
     const { isCompleted } = req.body;
     const { uuid } = req.params;
-    await Todo.update(
-      {
-        isCompleted,
-      },
-      {
-        where: {
-          uuid,
-        },
-      }
-    );
+    await Todo.update({ isCompleted }, { where: { uuid } });
     res.status(200).json({ message: "Update successful", isCompleted });
   } catch (error) {
-    res.status(500).json({ error: "Error updating data" });
+    res.status(500).json({ error: "Error updating todo status" });
     console.error(error);
   }
-});
+};
 
-//delete all todo
-router.delete("/todos", async (req, res) => {
+// Delete all todos
+const deleteAllTodos = async (req, res) => {
   try {
     await Todo.truncate();
-    res.status(200).json({ msg: "all records deleted successfully" });
+    res.status(200).json({ msg: "All todos deleted successfully" });
   } catch (error) {
-    res.status(500).json({ error: "Error deleting data" });
+    res.status(500).json({ error: "Error deleting todos" });
     console.error(error);
   }
-});
+};
 
-//delete a todo
-router.delete("/todos/:uuid", async (req, res) => {
+// Delete a todo
+const deleteTodo = async (req, res) => {
   try {
     const { uuid } = req.params;
-    await Todo.destroy({
-      where: {
-        uuid,
-      },
-    });
-    res.status(200).json({ message: "todo deleted successfully" });
+    await Todo.destroy({ where: { uuid } });
+    res.status(200).json({ message: "Todo deleted successfully" });
   } catch (error) {
-    res.status(500).json({ error: "Error deleting data" });
+    res.status(500).json({ error: "Error deleting todo" });
     console.error(error);
   }
-});
+};
 
-module.exports = router;
+module.exports = {
+  getAllTodos,
+  getTodosByUserUuid,
+  createTodo,
+  updateTodo,
+  updateTodoStatus,
+  deleteAllTodos,
+  deleteTodo,
+};
