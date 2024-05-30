@@ -11,7 +11,7 @@ const InputTodo = ({ uuid, setTodos, todos }) => {
       toast.warning("Please write something!");
     } else {
       try {
-        const response = await api.post(`/api/todos`, {
+        const response = await api.post(`/todo/todos`, {
           description,
           useruuid: uuid,
         });

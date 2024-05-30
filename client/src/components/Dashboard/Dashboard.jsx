@@ -17,7 +17,7 @@ const Dashboard = ({ setAuth }) => {
 
   const getUserName = async () => {
     try {
-      const response = await api.get("/dashboard/", {
+      const response = await api.get("/user/dashboard", {
         headers: {
           token: localStorage.token,
         },
@@ -31,7 +31,7 @@ const Dashboard = ({ setAuth }) => {
 
   const fetchTodos = async (userUuid) => {
     try {
-      const response = await api.get(`/api/todos/${userUuid}`);
+      const response = await api.get(`/todo/todos/${userUuid}`);
       setTodos(response.data);
     } catch (error) {
       console.error(error);
@@ -60,9 +60,9 @@ const Dashboard = ({ setAuth }) => {
         </button>
       </div>
       <h3 className="text-center mb-4">Task Overview</h3>
-      <InputTodo uuid={uuid} setTodos={setTodos} todos={todos} />
+      <InputTodo uuid={uuid} todos={todos} setTodos={setTodos}  />
       <ListTodo todos={todos} setTodos={setTodos} />
-      <DeleteAllTodos />
+      <DeleteAllTodos todos={todos} setTodos={setTodos}/>
     </div>
   );
 };

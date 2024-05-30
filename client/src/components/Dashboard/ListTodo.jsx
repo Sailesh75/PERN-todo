@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import api from "../../api";
 import EditTodo from "./EditTodo";
 import "./_ListTodo.scss";
+import { toast } from "react-toastify";
 
 const ListTodo = ({ todos, setTodos }) => {
-  const [loading, setLoading] = useState({});
-
   const deleteTodo = async (id) => {
     try {
-      await api.delete(`/api/todos/${id}`);
+      await api.delete(`/todo/todos/${id}`);
       setTodos(todos.filter((todo) => todo.uuid !== id));
+      toast.success("Task deleted successfully!!");
     } catch (error) {
       console.error(error);
     }
@@ -17,23 +17,19 @@ const ListTodo = ({ todos, setTodos }) => {
 
   const handleCheckboxChange = async (event, todoUuid) => {
     const newIsCompleted = event.target.checked;
-    setLoading((prev) => ({ ...prev, [todoUuid]: true }));
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.uuid === todoUuid ? { ...todo, isCompleted: newIsCompleted } : todo
+      )
+    );
 
     try {
-      await api.put(`/api/todos/check/${todoUuid}`, {
+      await api.put(`/todo/todos/check/${todoUuid}`, {
         isCompleted: newIsCompleted,
       });
-      setTodos((prevTodos) =>
-        prevTodos.map((todo) =>
-          todo.uuid === todoUuid
-            ? { ...todo, isCompleted: newIsCompleted }
-            : todo
-        )
-      );
     } catch (error) {
       console.error("Error updating todo status:", error);
-    } finally {
-      setLoading((prev) => ({ ...prev, [todoUuid]: false }));
+      toast.warning("Error while adding task!!")
     }
   };
 
@@ -53,25 +49,16 @@ const ListTodo = ({ todos, setTodos }) => {
             return (
               <tr key={todo.uuid}>
                 <td className="list-todo-status">
-                  {loading[todo.uuid] ? (
-                    <div
-                      className="spinner-border spinner-border-sm text-primary"
-                      role="status"
-                    >
-                      <span className="visually-hidden">Loading...</span>
-                    </div>
-                  ) : (
-                    <input
-                      type="checkbox"
-                      className="list-todo-checkbox"
-                      checked={todo.isCompleted}
-                      onChange={(e) => handleCheckboxChange(e, todo.uuid)}
-                    />
-                  )}
+                  <input
+                    type="checkbox"
+                    className="list-todo-checkbox"
+                    checked={todo.isCompleted}
+                    onChange={(e) => handleCheckboxChange(e, todo.uuid)}
+                  />
                 </td>
                 <td className="list-todo-todo">{todo.description}</td>
                 <td className="list-todo-edit">
-                  <EditTodo todo={todo} />
+                  <EditTodo todo={todo} setTodos={setTodos}/>
                 </td>
                 <td className="list-todo-delete">
                   <button

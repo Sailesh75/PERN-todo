@@ -1,20 +1,26 @@
 import React, { useState } from "react";
 import api from "../../api";
 import Modal from "./Modal/Modal";
+import { toast } from "react-toastify";
 
-const EditTodo = ({ todo }) => {
+const EditTodo = ({ todo, setTodos }) => {
   const [showModal, setShowModal] = useState(false);
   const [description, setDescription] = useState(todo.description);
 
   const updateTodo = async (e) => {
     e.preventDefault();
+    setTodos((prevTodos) =>
+      prevTodos.map((t) => (t.uuid === todo.uuid ? { ...t, description } : t))
+    );
+    setShowModal(false);
+    toast.success("Task updated successfully!!");
     try {
-      await api.put(`/api/todos/${todo.uuid}`, {
+      await api.put(`/todo/todos/${todo.uuid}`, {
         description,
       });
-      window.location.reload();
     } catch (error) {
       console.error(error);
+      toast.error("Error updating task");
     }
   };
 
