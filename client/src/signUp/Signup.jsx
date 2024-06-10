@@ -4,6 +4,7 @@ import api from "../api";
 import { toast } from "react-toastify";
 import PasswordToggle from "../components/PasswordToggle";
 import "../signUp/_signup.scss";
+import { FaGoogle, FaGithub, FaGitlab } from "react-icons/fa";
 
 const Signup = ({ setAuth }) => {
   const [username, setUsername] = useState("");
@@ -67,6 +68,10 @@ const Signup = ({ setAuth }) => {
     }
   };
 
+  const handleOAuthLogin = (provider) => {
+    window.location.href = `${api.defaults.baseURL}/auth/${provider}`;
+  };
+
   return (
     <div className="signup-container">
       <h2 className="signup-title">Sign Up</h2>
@@ -117,6 +122,15 @@ const Signup = ({ setAuth }) => {
           </button>
         </div>
       </form>
+      <p className="or-text">or sign up with</p>
+      <div className="oauth-buttons">
+        <button
+          className="btn btn-danger oauth-btn"
+          onClick={() => handleOAuthLogin("google")}
+        >
+          <FaGoogle /> Google
+        </button>
+      </div>
       <p className="form-label text-center mt-3">
         Already have an account?{" "}
         <a href="/login" className="login-link">
