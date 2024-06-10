@@ -16,7 +16,7 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, {
     host: config.host,
     dialect: config.dialect,
-    port: 5432,
+    port: config.port,
     pool: {
       max: 5,
       min: 0,
