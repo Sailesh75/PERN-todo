@@ -62,7 +62,8 @@ const Login = ({ setAuth }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <span className="password-toggle-icon2">{ToggleIcon}</span>
+            {/* <span className="password-toggle-icon2">{ToggleIcon}</span>
+            <span>Forgot password</span> */}
           </div>
           <button type="submit" className="btn btn-primary login-btn">
             Login

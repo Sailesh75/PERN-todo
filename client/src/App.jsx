@@ -12,10 +12,11 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Login from "./login/Login";
 import SignUp from "./signUp/Signup";
 import Nopage from "./components/Nopage";
+import AuthCallback from "./components/OAuthCallback"; // Import AuthCallback component
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   const setAuth = (boolean) => {
     setIsAuthenticated(boolean);
@@ -29,13 +30,12 @@ const App = () => {
         },
       });
       const parseRes = response.data;
-      console.log(parseRes);
       setIsAuthenticated(parseRes === true);
     } catch (error) {
       console.error(error);
       setIsAuthenticated(false);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -82,6 +82,10 @@ const App = () => {
               <Navigate to="/login" />
             )
           }
+        />
+        <Route
+          path="/auth/callback"
+          element={<AuthCallback setAuth={setAuth} />}
         />
         <Route path="*" element={<Nopage />} />
       </Routes>

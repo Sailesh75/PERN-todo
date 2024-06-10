@@ -20,12 +20,12 @@
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .signup-btn {
-  background-color: #3751ff; 
-  width: 100px; 
+  background-color: #3751ff;
+  width: 100px;
   padding: 10px 15px;
   margin-top: 10px;
 }
@@ -47,6 +47,31 @@
   color: #9fa2b4;
 }
 
-.dashboard-header{
+.dashboard-header {
   display: flex;
+}
+
+.or-text {
+  margin: 5px 0;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.oauth-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+
+  .oauth-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 5px;
+    font-size: 1rem;
+
+    svg {
+      margin-right: 8px;
+    }
+  }
 }
