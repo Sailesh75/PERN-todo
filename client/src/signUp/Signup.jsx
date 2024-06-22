@@ -4,7 +4,7 @@ import api from "../api";
 import { toast } from "react-toastify";
 import PasswordToggle from "../components/PasswordToggle";
 import "../signUp/_signup.scss";
-import { FaGoogle, FaGithub, FaGitlab } from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
 
 const Signup = ({ setAuth }) => {
   const [username, setUsername] = useState("");
@@ -27,54 +27,47 @@ const Signup = ({ setAuth }) => {
     return passwordRegex.test(password);
   };
 
-  const handleSubmit = async (e, buttonClicked) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Check which button was clicked
-    if (buttonClicked === 'signup') {
-      if (!username.trim() || !email.trim() || !password.trim()) {
-        toast.warning("Please fill in all fields.");
-        return;
+    if (!username.trim() || !email.trim() || !password.trim()) {
+      toast.warning("Please fill in all fields.");
+      return;
+    }
+    if (!isUsernameValid(username)) {
+      toast.error(
+        "Username must be at least 3-15 characters long and start with a letter. Only letters and numbers are allowed."
+      );
+      return;
+    }
+    if (!isEmailValid(email)) {
+      toast.error("Invalid email format");
+      return;
+    }
+    if (!isPasswordValid(password)) {
+      toast.error(
+        "Password must be at least 8 characters long and contain at least one number and one special character."
+      );
+      return;
+    }
+    try {
+      const response = await api.post("/user/register", {
+        username,
+        email,
+        password,
+      });
+      const { token } = response.data;
+      localStorage.setItem("token", token);
+      setAuth(true);
+      navigate("/");
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        toast.error("Email already registered. Please use a different email.");
+      } else {
+        console.error(error.message);
       }
-      if (!isUsernameValid(username)) {
-        toast.error(
-          "Username must be at least 3-15 characters long and start with a letter. Only letters and numbers are allowed."
-        );
-        return;
-      }
-      if (!isEmailValid(email)) {
-        toast.error("Invalid email format");
-        return;
-      }
-      if (!isPasswordValid(password)) {
-        toast.error(
-          "Password must be at least 8 characters long and contain at least one number and one special character."
-        );
-        return;
-      }
-      try {
-        const response = await api.post("/user/register", {
-          username,
-          email,
-          password,
-        });
-        const { token } = response.data;
-        localStorage.setItem("token", token);
-        setAuth(true);
-        navigate("/");
-      } catch (error) {
-        if (error.response && error.response.status === 400) {
-          toast.error("Email already registered. Please use a different email.");
-        } else {
-          console.error(error.message);
-        }
-      }
-    } else if (buttonClicked === 'google') {
-      // Handle Google sign-in logic
-      handleOAuthLogin("google");
     }
   };
-  
+
   const handleOAuthLogin = (provider) => {
     window.location.href = `${api.defaults.baseURL}/auth/${provider}`;
   };
@@ -82,7 +75,7 @@ const Signup = ({ setAuth }) => {
   return (
     <div className="signup-container">
       <h2 className="signup-title">Sign Up</h2>
-      <form onSubmit={(e) => handleSubmit(e, 'signup')} className="signup-form">
+      <form onSubmit={handleSubmit} className="signup-form">
         <div className="form-group">
           <label htmlFor="username" className="form-label">
             Username
@@ -127,11 +120,12 @@ const Signup = ({ setAuth }) => {
           <div className="signup-btn-container">
             <button type="submit" className="btn btn-primary signup-btn">
               Sign Up
-            </button> 
+            </button>
           </div>
           <p className="or-text">or</p>
           <div className="oauth-buttons">
             <button
+              type="button"
               className="btn btn-danger oauth-btn"
               onClick={() => handleOAuthLogin("google")}
             >
@@ -151,7 +145,4 @@ const Signup = ({ setAuth }) => {
   );
 };
 
-
 export default Signup;
-
-
