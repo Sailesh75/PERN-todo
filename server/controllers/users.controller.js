@@ -1,6 +1,6 @@
 const { User } = require("../models");
 const jwtGenerator = require("../utils/jwtGenerator");
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 
 // Register user
 const registerUser = async (req, res) => {
@@ -67,8 +67,11 @@ const forgotPassword = async (req, res) => {
     const resetToken = jwtGenerator(user);
     const resetExpires = Date.now() + 3600000; // 1 hour
 
-    user.resetPasswordToken = resetToken;
-    user.resetPasswordExpires = resetExpires;
+    console.log(resetToken);
+    console.log(resetExpires);
+
+    user.resetpasswordtoken = resetToken;
+    user.resetpasswordexpires = resetExpires;
     await user.save();
 
     const resetUrl = `https://todo-application-99.netlify.app/reset-password/${resetToken}`;
