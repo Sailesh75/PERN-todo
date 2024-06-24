@@ -1,5 +1,6 @@
 const { User } = require("../models");
 const jwtGenerator = require("../utils/jwtGenerator");
+const nodemailer = require('nodemailer');
 
 // Register user
 const registerUser = async (req, res) => {
@@ -52,6 +53,74 @@ const verifyToken = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json(error);
+  }
+};
+
+//forgot password
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(400).json({ msg: "Bad request: User doesn't exist!" });
+    }
+    const resetToken = jwtGenerator(user);
+    const resetExpires = Date.now() + 3600000; // 1 hour
+
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = resetExpires;
+    await user.save();
+
+    const resetUrl = `https://todo-application-99.netlify.app/reset-password/${resetToken}`;
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.GMAIL_EMAIL,
+        pass: process.env.GMAIL_PASSWORD,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.GMAIL_EMAIL,
+      to: email,
+      subject: "Password Reset Request",
+      html: `Click <a href="${resetUrl}">here</a> to reset your password.`,
+    };
+
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ message: "Password reset email sent" });
+  } catch (error) {
+    console.error("Error sending password reset email:", error);
+    res.status(500).json(error);
+  }
+};
+
+//reset password
+const resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { newPassword } = req.body;
+  try {
+    const user = await User.findOne({
+      where: {
+        resetPasswordToken: token,
+        resetPasswordExpires: { [Op.gt]: Date.now() },
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+
+    user.password = newPassword;
+    user.resetPasswordToken = null;
+    user.resetPasswordExpires = null;
+    await user.save();
+
+    res.status(200).json({ message: "Password has been reset" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -137,5 +206,7 @@ module.exports = {
   getUserByUuid,
   updateUser,
   deleteUser,
-  getUserDetails
+  getUserDetails,
+  forgotPassword,
+  resetPassword,
 };
