@@ -1,3 +1,4 @@
+require("dotenv").config;
 const { User } = require("../models");
 const jwtGenerator = require("../utils/jwtGenerator");
 const nodemailer = require("nodemailer");
@@ -79,21 +80,24 @@ const forgotPassword = async (req, res) => {
     console.log(`Reset url is: ${resetUrl}`);
     console.log(`Sending the mail`);
 
+    console.log(process.env.GMAIL_EMAIL);
+    console.log(process.env.GMAIL_PASSWORD);
+
     const transporter = nodemailer.createTransport({
       service: "gmail",
       port: 465,
       secure: true,
-      debug:true,
-      logger:true,
+      debug: true,
+      logger: true,
       auth: {
         user: process.env.GMAIL_EMAIL,
         pass: process.env.GMAIL_PASSWORD,
       },
       secureConnection: true,
-      tls:{
+      tls: {
         ciphers: "SSLv3",
-        rejectUnauthorized: true
-      }
+        rejectUnauthorized: true,
+      },
     });
 
     const mailOptions = {
