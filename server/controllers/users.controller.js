@@ -67,14 +67,17 @@ const forgotPassword = async (req, res) => {
     const resetToken = jwtGenerator(user);
     const resetExpires = Date.now() + 3600000; // 1 hour
 
-    console.log(resetToken);
-    console.log(resetExpires);
+    console.log(`Reset token is ${resetToken}`);
+    console.log(`Reset Expires at ${resetExpires}`);
 
     user.resetpasswordtoken = resetToken;
     user.resetpasswordexpires = resetExpires;
     await user.save();
 
     const resetUrl = `https://todo-application-99.netlify.app/reset-password/${resetToken}`;
+
+    console.log(`Reset url is: ${resetUrl}`);
+    console.log(`Sending the mail`);
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -86,7 +89,7 @@ const forgotPassword = async (req, res) => {
 
     const mailOptions = {
       from: process.env.GMAIL_EMAIL,
-      to: email,
+      to: user.email,
       subject: "Password Reset Request",
       html: `Click <a href="${resetUrl}">here</a> to reset your password.`,
     };
