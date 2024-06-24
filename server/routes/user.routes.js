@@ -11,6 +11,8 @@ const {
   updateUser,
   deleteUser,
   getUserDetails,
+  forgotPassword,
+  resetPassword
 } = require("../controllers/users.controller");
 
 //register user
@@ -27,6 +29,13 @@ router.get("/dashboard", authorize, getUserDetails);
 
 // Get all users
 router.get("/users", getAllUsers);
+
+//forgot password
+router.post("/forgot-password", forgotPassword);
+
+//reset password
+router.post("/reset-password/:token", resetPassword );
+
 
 // Get user by UUID with their todo list
 router.get("/users/:uuid", getUserByUuid);
