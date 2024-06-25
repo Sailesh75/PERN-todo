@@ -62,7 +62,10 @@ const Login = ({ setAuth }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <span className="password-toggle-icon3">{ToggleIcon}</span>
+            <span className="password-toggle-icon2">{ToggleIcon}</span>
+            <a href="/forgot-password" className="forgot-password-link">
+              Forgot password?
+            </a>
           </div>
           <button type="submit" className="btn btn-primary login-btn">
             Login
