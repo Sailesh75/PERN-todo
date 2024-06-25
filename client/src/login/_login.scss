@@ -42,8 +42,8 @@
 
 .password-toggle-icon3 {
   position: relative;
-  top: -30px;
-  left: 245px;
+  top: -40px;
+  left: 250px;
   cursor: pointer;
   color: #9fa2b4;
 }
@@ -51,9 +51,12 @@
 .forgot-password-link {
   display: inline-block;
   margin-top: 10px;
+  margin-bottom: 20px;
   color: #007bff;
   text-decoration: none;
   cursor: pointer;
+  position: relative;
+  right: -125px;
 
   &:hover {
     text-decoration: underline;

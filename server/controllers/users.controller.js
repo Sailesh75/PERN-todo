@@ -1,5 +1,6 @@
 require("dotenv").config;
 const { User } = require("../models");
+const { Op } = require("sequelize");
 const jwtGenerator = require("../utils/jwtGenerator");
 const nodemailer = require("nodemailer");
 
@@ -75,7 +76,7 @@ const forgotPassword = async (req, res) => {
     user.resetPasswordExpires = resetExpires;
     await user.save();
 
-    const resetUrl = `https://todo-application-99.netlify.app/reset-password/${resetToken}`;
+    const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
 
     console.log(`Reset url is: ${resetUrl}`);
     console.log(`Sending the mail`);

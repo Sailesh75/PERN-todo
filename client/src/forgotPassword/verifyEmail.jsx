@@ -49,6 +49,12 @@ const verifyEmail = ({}) => {
           Send
         </button>
       </form>
+      <p className="form-label text-center mt-3">
+        Don't have an account?{" "}
+        <a href="/signup" className="signup-link">
+          Sign up here
+        </a>
+      </p>
     </div>
   );
 };
