@@ -15,7 +15,8 @@
 
 .signup-form {
   border-radius: 8px;
-  padding: 20px;
+  padding-left: 50px;
+  padding-right: 50px;
   width: 400px;
 }
 
@@ -42,7 +43,7 @@
 .password-toggle-icon2 {
   position: relative;
   top: -30px;
-  left: 330px;
+  left: 270px;
   cursor: pointer;
   color: #9fa2b4;
 }
@@ -55,6 +56,7 @@
   margin: 5px 0;
   font-size: 1rem;
   color: #fff;
+  text-align: center;
 }
 
 .oauth-buttons {
@@ -73,5 +75,13 @@
     svg {
       margin-right: 8px;
     }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .signup-buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
   }
 }

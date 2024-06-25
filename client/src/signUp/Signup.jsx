@@ -4,7 +4,7 @@ import api from "../api";
 import { toast } from "react-toastify";
 import PasswordToggle from "../components/PasswordToggle";
 import "../signUp/_signup.scss";
-import { FaGoogle, FaGithub, FaGitlab } from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
 
 const Signup = ({ setAuth }) => {
   const [username, setUsername] = useState("");
@@ -116,21 +116,25 @@ const Signup = ({ setAuth }) => {
           />
           <span className="password-toggle-icon2">{ToggleIcon}</span>
         </div>
-        <div className="signup-btn-container">
-          <button type="submit" className="btn btn-primary signup-btn">
-            Sign Up
-          </button>
+        <div className="signup-buttons">
+          <div className="signup-btn-container">
+            <button type="submit" className="btn btn-primary signup-btn">
+              Sign Up
+            </button>
+          </div>
+          <p className="or-text">or</p>
+          <div className="oauth-buttons">
+            <button
+              type="button"
+              className="btn btn-danger oauth-btn"
+              onClick={() => handleOAuthLogin("google")}
+            >
+              <FaGoogle /> Google
+            </button>
+          </div>
         </div>
       </form>
-      <p className="or-text">or sign up with</p>
-      <div className="oauth-buttons">
-        <button
-          className="btn btn-danger oauth-btn"
-          onClick={() => handleOAuthLogin("google")}
-        >
-          <FaGoogle /> Google
-        </button>
-      </div>
+
       <p className="form-label text-center mt-3">
         Already have an account?{" "}
         <a href="/login" className="login-link">
