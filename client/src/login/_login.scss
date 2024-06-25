@@ -48,3 +48,14 @@
   color: #9fa2b4;
 }
 
+.forgot-password-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: #007bff;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

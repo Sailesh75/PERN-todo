@@ -12,7 +12,9 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Login from "./login/Login";
 import SignUp from "./signUp/Signup";
 import Nopage from "./components/Nopage";
-import AuthCallback from "./components/OAuthCallback"; // Import AuthCallback component
+import AuthCallback from "./components/OAuthCallback";
+import VerifyEmail from "./forgotPassword/verifyEmail";
+import ResetPassword from "./forgotPassword/resetPassword";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -87,6 +89,8 @@ const App = () => {
           path="/auth/callback"
           element={<AuthCallback setAuth={setAuth} />}
         />
+        <Route path="/forgot-password" element={<VerifyEmail />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="*" element={<Nopage />} />
       </Routes>
     </Router>
