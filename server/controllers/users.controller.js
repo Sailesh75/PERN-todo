@@ -71,8 +71,8 @@ const forgotPassword = async (req, res) => {
     console.log(`Reset token is ${resetToken}`);
     console.log(`Reset Expires at ${resetExpires}`);
 
-    user.resetpasswordtoken = resetToken;
-    user.resetpasswordexpires = resetExpires;
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = resetExpires;
     await user.save();
 
     const resetUrl = `https://todo-application-99.netlify.app/reset-password/${resetToken}`;
