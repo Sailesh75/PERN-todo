@@ -104,7 +104,7 @@ const forgotPassword = async (req, res) => {
     };
 
     await transporter.sendMail(mailOptions);
-    res.status(200).json({ message: "Password reset email sent" });
+    res.status(200).json({ message: "Password reset email sent", resetToken });
   } catch (error) {
     console.error("Error sending password reset email:", error);
     res.status(500).json(error);
@@ -114,7 +114,7 @@ const forgotPassword = async (req, res) => {
 //reset password
 const resetPassword = async (req, res) => {
   const { token } = req.params;
-  const { newPassword } = req.body;
+  const { password } = req.body;
   try {
     const user = await User.findOne({
       where: {
@@ -127,7 +127,7 @@ const resetPassword = async (req, res) => {
       return res.status(400).json({ message: "Invalid or expired token" });
     }
 
-    user.password = newPassword;
+    user.password = password;
     user.resetPasswordToken = null;
     user.resetPasswordExpires = null;
     await user.save();
