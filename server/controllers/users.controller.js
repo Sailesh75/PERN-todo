@@ -67,22 +67,13 @@ const forgotPassword = async (req, res) => {
       return res.status(400).json({ msg: "Bad request: User doesn't exist!" });
     }
     const resetToken = jwtGenerator(user);
-    const resetExpires = Date.now() + 3600000; // 1 hour
-
-    console.log(`Reset token is ${resetToken}`);
-    console.log(`Reset Expires at ${resetExpires}`);
+    const resetExpires = Date.now() + 15 * 60 * 1000; // 15 minutes
 
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpires = resetExpires;
     await user.save();
 
-    const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
-
-    console.log(`Reset url is: ${resetUrl}`);
-    console.log(`Sending the mail`);
-
-    console.log(process.env.GMAIL_EMAIL);
-    console.log(process.env.GMAIL_PASSWORD);
+    const resetUrl = `https://todo-application-99.netlify.app/reset-password/${resetToken}`;
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -105,7 +96,11 @@ const forgotPassword = async (req, res) => {
       from: process.env.GMAIL_EMAIL,
       to: user.email,
       subject: "Password Reset Request",
-      html: `Click <a href="${resetUrl}">here</a> to reset your password.`,
+      html: `
+        <p>You requested a password reset.</p>
+        <p>Click <a href="${resetUrl}">here</a> to reset your password. This link will expire in 15 minutes.</p>
+        <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
+      `,
     };
 
     await transporter.sendMail(mailOptions);
