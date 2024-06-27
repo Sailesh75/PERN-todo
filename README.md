@@ -5,6 +5,8 @@ A simple and intuitive full-stack Todo application built with React, Node.js, an
 
 ## Features
 - User authentication and authorization
+- Google OAuth integration for easy login
+- Password reset via email using Nodemailer
 - Add, edit, and delete tasks
 - Mark tasks as complete/incomplete
 - Responsive design
@@ -12,12 +14,15 @@ A simple and intuitive full-stack Todo application built with React, Node.js, an
 - Deployed on Railway, Render, and Netlify
 
 ## Technologies Used
-- Frontend: React, React Hooks, Axios, Bootstrap
-- Backend: Node.js, Express
-- Database: PostgreSQL
-- Hosting: Railway, Render, Netlify
-- CI/CD: GitHub Actions
-- Other: React-Toastify for notifications
+- **Frontend**: React, React Hooks, Axios, Bootstrap
+- **Backend**: Node.js, Express
+- **Database**: PostgreSQL
+- **Hosting**: Railway, Render, Netlify
+- **CI/CD**: GitHub Actions
+- **Other**: 
+  - React-Toastify for notifications
+  - Google OAuth for authentication
+  - Nodemailer for email functionality
 
 ## Setup Instructions
 
@@ -42,7 +47,7 @@ A simple and intuitive full-stack Todo application built with React, Node.js, an
     ```bash
     cp .env.example .env
     ```
-   - Configure your database settings in the `.env` file.
+   - Configure your database settings, Google OAuth credentials, and email settings in the `.env` file.
 5. Run the application:
     ```bash
     npm start
@@ -81,7 +86,6 @@ A simple and intuitive full-stack Todo application built with React, Node.js, an
 
 ## Project Links
 - [Live Demo](https://todo-application-99.netlify.app/login)
-
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
